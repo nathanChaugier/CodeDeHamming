@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.16">
+<title>Modélisation Mathématiques : Code Correcteur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>Modélisation Mathématiques : Code Correcteur</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<hr>
+<div style="page-break-after: always;"></div>
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table des matières</div>
+<ul class="sectlevel1">
+<li><a href="#_i_introduction_aux_codes_correcteurs">I - Introduction aux Codes Correcteurs</a>
+<ul class="sectlevel2">
+<li><a href="#_i_1_le_problème">I.1 <strong>Le problème</strong></a></li>
+<li><a href="#_i_2_le_bit_de_parité">I.2 <strong>Le bit de parité</strong></a></li>
+<li><a href="#_i_3_un_code_simple">I.3 <strong>Un code simple</strong></a></li>
+<li><a href="#_i_4_les_différents_cas_dutilisation">I.4 <strong>Les différents cas d&#8217;utilisation</strong></a></li>
+</ul>
+</li>
+<li><a href="#_ii_le_code_de_hamming">II - Le Code de Hamming</a>
+<ul class="sectlevel2">
+<li><a href="#_ii_1_une_approche_intuitive">II.1 <strong>Une approche intuitive</strong></a></li>
+<li><a href="#_ii_2_construction_du_code_et_décodage">II.2 <strong>Construction du code et décodage</strong></a></li>
+<li><a href="#_ii_3_code_de_hamming_en_8_4">II.3 <strong>Code de Hamming en (8, 4)</strong></a></li>
+</ul>
+</li>
+<li><a href="#_iii_généralisaton_du_code_de_hamming">III - Généralisaton du code de Hamming</a>
+<ul class="sectlevel2">
+<li><a href="#_iii_1_hamming_en_7_4">III.1 <strong>Hamming en (7, 4)</strong></a></li>
+<li><a href="#_iii_2_de_plus_en_plus_grand">III.2 <strong>De plus en plus grand</strong></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_i_introduction_aux_codes_correcteurs">I - Introduction aux Codes Correcteurs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_i_1_le_problème">I.1 <strong>Le problème</strong></h3>
+<div class="paragraph">
+<p>Dans un premier temps nous allons introduire la notion de code correcteur d’erreur. Quand un objet dit source émet un message binaire à un autre objet dit récepteur, le message doit passer par un canal de transmission. Cela peut être un câble ethernet, des ondes radio, etc. Il est alors possible qu’un bit soit erroné, la source émet 1011 et le récepteur reçoit 1010. Le récepteur n’a alors aucun moyen pour détecter l’erreur. Pour éviter cela on rajoute des bits au message dit de redondance qui détecteront l’erreur.<br>
+Nous pouvons comparer cela avec le langage, quand nous voulons communiquer des informations à quelqu’un d’autre (nous sommes alors la source et l’autre personne le récepteur) nous utilisons le langage. Il peut arriver qu’avec le bruit ambiant un mot ou plusieurs dans une phrase soient mal compris. Cependant, grâce au contexte de la phrase, il nous est souvent possible de comprendre qu&#8217;un mot a mal été compris et donc, de demander à la source de répéter la phrase. Sans le contexte de la phrase il serait impossible de réinterpréter le mot. Nous allons donc essayer de donner du contexte à nos mots binaires ce qui se nomme un code correcteur.<br>
+Pour mettre en place un code correcteur sur un canal de transmission, il faut rajouter un encodeur après la source pour ajouter les bits de redondances, et un décodeur avant le récepteur pour vérifier qu&#8217;il n&#8217;y ait pas d&#8217;erreur et enlever les bits de redondance. Bien sûr, si il y a une erreur, il doit soit demander à la source de ré-émettre le message ou le réparer.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/misEnPlace.png" alt="misEnPlace">
+</div>
+<div class="title">Figure 1. Mise en place d&#8217;un code correcteur sur un canal de transmission</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_i_2_le_bit_de_parité">I.2 <strong>Le bit de parité</strong></h3>
+<div class="paragraph">
+<p>Pour pallier ce problème, la solution la plus simple et la plus connue est le bit de parité. Il sert uniquement à détecter une erreur de transmission. Pour se faire, à la suite du mot que nous voulons protéger, nous y ajoutons un 0 si il y a un nombre pair de 1 ou un 1 si il y a un nombre impair de 1. Nous pouvons remarquer que si un mot comporte un bit de parité, il doit alors y avoir un nombre pair de 1. Si nous additionnons maintenant tous les bits du mots, le résultat doit être pair.</p>
+</div>
+<div class="paragraph">
+<p>Notons un mot \(m\) de \(n\) bits \(b_n ..b_2 b_1 b_0\) et \(P_m\) la somme modulo 2 de tous ses bits. Dorénavant nous parlerons de sa parité, \(P_m = 0\) si le mot \(m\) contient un nombre pair de 1, et \(P_m = 1\) si le mot \(m\) contient un nombre impair de 1.<br>
+Donc :
+\(P_m \equiv \sum\limits_{\substack{i=0}}^{n}{b_i}\lbrack 2 \rbrack\) et
+\(P_m = \bigoplus \limits_{\underset{}{i=0}}^n b_i\)<br></p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Le signe \(\oplus\) est le symbole du "xor" (ou exclusif) et à pour table de vérité :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 15%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\(\oplus\)</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Et le \(\bigoplus\) est au \(\oplus\) ce que \(\sum\) est au \(+\).</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>L&#8217;ajout d&#8217;un bit de parité revient à ajouter à la fin de \(m\) \(P_m\), nous noterons ce nouveau mot \(b_m\) (\(b_n ..b_2 b_1 b_0 P_m\)) et \(P_b\) sa parité.</p>
+</div>
+<div class="paragraph">
+<p>\(P_b \equiv (P_m + P_m) \lbrack 2 \rbrack\)<br></p>
+</div>
+<div class="paragraph">
+<p>si \(P_m = 0\)<br>
+alors : \(P_b \equiv (0 + 0) \lbrack 2 \rbrack \Rightarrow P_b = 0\)<br>
+et si \(P_m = 1\)<br>
+alors : \(P_b \equiv (1 + 1) \lbrack 2 \rbrack \Rightarrow P_b = 0\)</p>
+</div>
+<div class="paragraph">
+<p>Nous pouvons remarquer donc que \(P_b\) est forcément égal à 0. Si ce n&#8217;est pas le cas, nous pouvons alors constater qu&#8217;il y a au moins une erreur dans le mot. Cependant, nous ne pouvons pas corriger l&#8217;erreur. En plus de cela, si il y a un nombre pair de bits erronés, nous ne seront donc pas en mesure de détecter qu&#8217;il y ait des erreurs.</p>
+</div>
+<div class="paragraph">
+<p>Nous allons maintenant calculer la probabilité qu&#8217;il y ait des erreurs dans un mot de 8 bits avec un bit de parité inclus, et que nous ne puissions pas les détecter.<br>
+Nous prenons un taux d&#8217;erreur assez élevé de 1 sur 1000, c&#8217;est à dire que pour un bit, il y a une chance sur mille qu&#8217;il soit erroné. Cela peut correspondre à un mauvais résau wi-fi avec des intérférences comme la wi-fi des voisins, ou bien une distance trop grande parcourue par les ondes wi-fi.
+Notons \(p\) la probabilité qu&#8217;un bit soit erroné donc \(p = 10^{-3}\), et \(X\) la variable aléatoire qui compte le nombre de bit erroné sur un octet. \(X \hookrightarrow \mathscr{B}(8, 10^{-3})\).<br>
+Calculons :
+\(\sum\limits_{\substack{i=1}}^{4}P(X = i \times 2) = P(X=2)+P(X=4)+P(X=6)+P(X=8)\)<br>
+\(P(X=k)=\binom{k}{8} \times p^{k} \times p^{8-k}\)<br>
+\(\Leftrightarrow \sum\limits_{\substack{i=1}}^{4}P(X = i \times 2) = \sum\limits_{\substack{i=1}}^{4}\binom{i \times 2}{8} \times p^{i \times 2} \times p^{8-i \times 2}\)<br>
+\(\Leftrightarrow \sum\limits_{\substack{i=1}}^{4}P(X = i \times 2) = \sum\limits_{\substack{i=1}}^{4}\binom{i \times 2}{8} \times 10^{-3^{i \times 2}} \times 10^{-3^{8-i \times 2}}\)<br>
+\(\Leftrightarrow \sum\limits_{\substack{i=1}}^{4}P(X = i \times 2) \approx 0.000028 \)<br>
+La probabilité qu&#8217;il y ait des erreurs mais qu&#8217;elles ne soient pas détectées est d&#8217;environ d&#8217;une chance sur trente mille. Nous pouvons donc dire que dans la plupart des cas, un bit de parité par octet suffit à détecter toutes les erreurs sachant que nous avons pris un taux d&#8217;erreur élevé. Plus nous baisserons ce taux, plus la chance de ne pas détecter les erreurs diminuera. Néanmoins, il n&#8217;est pas possible de réparer un mot reçu avec une erreur et nous ne pouvons de plus, pas connaître le rang du bit erroné. Si le récepteur veut recevoir le bon mot, il est obligé de demander à nouveau à la source de d&#8217;émettre le même mot : c&#8217;est de cette manière que plusieurs protocoles fonctionnent : nous pouvons par exemple citer le protocole TCP. Nous pouvons aussi remarquer que, lorsqu&#8217;un octet possède plus d&#8217;une erreur, il y a alors de très grande chances que ce soit dû à une pertubation anormale et qu&#8217;un très grand nombre de bits soit erronés : ces anomalies sont alors facilement détectables. Donc \(X\) ne suit pas vraiment une loi binomiale, mais le bit de parité reste très fiable pour protéger un mot d&#8217;un octet.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_i_3_un_code_simple">I.3 <strong>Un code simple</strong></h3>
+<div class="paragraph">
+<p>Nous présentons ici un exemple élémentaire de code correcteur obtenu en complétant une suite de trois nombres (constituant l&#8217;information à transmettre) par deux autres nombres (constituant le code de contrôle de l&#8217;information). L&#8217;ensemble des cinq nombres permet alors de détecter et de corriger une erreur qui se serait produite sur l&#8217;un des trois premiers nombres lors de la transmission.<br>
+Soit donc un bloc de 3 nombres que l&#8217;on souhaite transmettre : 02 09 12<br>
+Ajoutons deux nombres de contrôle de l&#8217;information.<br>
+Le premier est la somme des 3 nombres : 02 + 09 + 12 = 23<br>
+Le second est la somme pondérée des 3 nombres, chacun est multiplié par son rang : 02 x 1 + 09 x 2 + 12 x 3 = 56<br>
+À la sortie du codeur, le bloc à transmettre est : 02 09 12 23 56<br>
+À la suite d&#8217;une perturbation, le récepteur reçoit : 02 13 12 23 56<br>
+À partir des données reçues, le décodeur calcule :<br>
+Sa somme simple : 02 + 13 + 12 = 27<br>
+Sa somme pondérée : 02 x 1 + 13 x 2 + 12 x 3 = 64<br>
+La différence entre la somme simple calculée (27) et celle reçue (23) indique la valeur de l&#8217;erreur : 4 (27-23 = 4)<br>
+La différence entre la somme pondérée calculée (64) et celle reçue (56), elle-même divisée par la valeur de l&#8217;erreur indique la position où l&#8217;erreur se trouve : 2 ((64-56) / 4 = 2).<br>
+Il faut donc retirer 4 au nombre du rang 2.<br>
+Le bloc original est donc 02 (13-4=09) 12 23 56<br>
+Lors d&#8217;une transmission sans perturbation, les différences des sommes simples et des sommes pondérées sont nulles.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_i_4_les_différents_cas_dutilisation">I.4 <strong>Les différents cas d&#8217;utilisation</strong></h3>
+<div class="paragraph">
+<p>Les codes correcteurs sont utilisés partout  pour la Wi-Fi, pour la radio, pour la télévision, pour les disques durs… Mais ils sont aussi utiliser sur les cartes vitales, sur les QR codes, sur les codes barres, sur les numéros de carte bancaire, etc.<br></p>
+</div>
+<div class="sect3">
+<h4 id="_lexemple_du_code_barre">L&#8217;exemple du code barre</h4>
+<div class="paragraph">
+<p>Nous allons ici parler du code correcteur des codes barres, mais pour la plupart des exemples que nous avons cités, le principe est le même. De plus ici on parle plus de clé de détection d&#8217;erreur, car tout comme avec le bit de parité, nous voulons uniquement pouvoir détecter l&#8217;erreur et pas la réparer.<br>
+Un code barre contient 30 barres qui représentent 13 chiffres organisés en trois parties.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/code_barre.png" alt="code barre" width="150" height="150">
+</div>
+<div class="title">Figure 2. Exemple d&#8217;un code barre</div>
+</div>
+<div class="paragraph">
+<p>La première partie comporte deux chiffres qui indiquent le pays d&#8217;où vient l&#8217;article (50 &#8594; Grande-Bretagne ; 84 &#8594; Espagne, 35 &#8594; France). Donc ici 50.<br>
+La deuxième partie comporte 5 chiffres identifiant le code de l&#8217;entreprise productrice : ici 12345.<br>
+Enfin la troisième partie comporte 5 chiffres identifiant le code du produit défini par l&#8217;entreprise: ici 67890.<br>
+Et donc le dernier chiffre est la clé de contrôle, ici 0.<br>
+Pour calculer la clé de contrôle à partir des trois premières parties il faut :<br></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ajouter les chiffres de rang impair en partant de la gauche.</p>
+</li>
+<li>
+<p>Ajouter à ce résultat trois fois la somme des chiffres de rang pair toujours en partant de la gauche.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On obtient \$R\$.<br>
+La clé de contrôle est le chiffre (entre 0 et 9) qui ajouté à R va donner un multiple de 10.</p>
+</div>
+<div class="paragraph">
+<p>Exemple avec le code :<br>
+5 0 1 2 3 4 5 6 7 8 9 0<br>
+\((5+1+3+5+7+9)+ 3 \times (0+2+4+6+8+0) = 90\)<br>
+Donc la clé est 0 car 90 + 0 est un multiple de 10.</p>
+</div>
+<div style="page-break-after: always;"></div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ii_le_code_de_hamming">II - Le Code de Hamming</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ii_1_une_approche_intuitive">II.1 <strong>Une approche intuitive</strong></h3>
+<div class="sect3">
+<h4 id="_lobjectif">L&#8217;objectif</h4>
+<div class="paragraph">
+<p>Hamming travaillait sur un modèle de calculateur à carte perforée de faible fiabilité pour les laboratoires Bell, ce qui nuisait fortement au travail des ingénieurs. Hamming devait alors améliorer la fiabilité des calculateurs. Il se dit que si nous pouvions ajouter des bits de contrôle, nous pourrions alors rendre le calculateur grandement fiable. Mais il faut tout d&#8217;abord définir clairement les objectifs du code correcteur.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;objectif du code est la transmission d&#8217;un message de quatre bits avec suffisamment de redondances pour que, même si une altération se produit, le récepteur soit capable de corriger automatiquement l&#8217;erreur. Le message envoyé est en conséquence plus long. Dans la pratique il contient sept bits : quatre composent le message et les trois autres servent à détecter et à corriger l&#8217;erreur, si nécessaire.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Objectifs :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Le code doit pouvoir protéger 4 bits</p>
+</li>
+<li>
+<p>Le code doit utiliser seulement 3 bits de redondances</p>
+</li>
+<li>
+<p>Le code doit pouvoir réparer une erreur</p>
+</li>
+<li>
+<p>Si l&#8217;erreur est dans le code correcteur cela ne doit pas poser de problème</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_le_code_parfait">Le code parfait</h4>
+<div class="paragraph">
+<p>Pour que le code soit parfait dans la situation de Hamming, c&#8217;est à dire qu&#8217;un mot de 4 bits passant par le canal de transmission puisse être reçu avec une erreur ou plus, il faut donc pour Hamming que le code correcteur puisse réparer le mot reçu si il y a une erreur et détecter si il y en a plus. De plus, il ne faut pas que la redondance soit trop grande : elle doit être optimisée pour que chaque état de la redondance soit associé à une information différente. Nous devons donc réparer un seul bit. Partons du principe qu&#8217;il y a une erreur ou moins dans le mot reçu. Il y a donc 5 possibilités : le bit erroné est \$d_1\$, \$d_2\$, \$d_3\$ ou \$d_4\$, mais il est aussi possible qu&#8217;aucun bit ne soit erroné. Cependant un code correcteur implique d&#8217;ajouter des bits de redondance et eux aussi peuvent être erronés. Prenons \$n\$ bits de redondances. il y a donc en tout \$5 + n\$ inforamtions à stocker dans les bits de redondance, et n bits peuvent décrire \$2^n\$ états différents. Par exemple sur deux bits nous pouvons décrire 4 états différents : 00, 01, 10, 11 ; ce qui correspond de compter de zéro à trois en base deux. Il faut donc que \$5 + n = 2^n\$ pour que la redondance soit minimale. Cette équation admet une unique solution : 3.</p>
+</div>
+<div class="paragraph">
+<p>On pouvons généraliser cette équation si nous avons \$k\$ bits de message et \$n\$ bits de redondance. Pour que le code soit parfait, il faut alors que \$k+n+1 = 2^n\$.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_avec_le_bit_de_parité">Avec le bit de parité</h4>
+<div class="imageblock right">
+<div class="content">
+<img src="img/hamming(7,4).png" alt="hamming(7,4)" width="280" height="280">
+</div>
+<div class="title">Figure 3. Représentation graphique</div>
+</div>
+<div class="paragraph">
+<p>Cependant, il faut toujours trouver une manière d&#8217;encoder facilement les 8 informations dans les 8 états possibles des bits de parité. Pour cela, Hamming trouve une manière plutôt astucieuse de le faire : il code chaque bits de redondance comme un bit de parité de trois bits parmi les quatres. Ainsi \$p_1 = d_1 \oplus d_2 \oplus d_4\$, \$p_2 = d_1 \oplus d_3 \oplus d_4\$ et \$p_3 = d_2 \oplus d_3 \oplus d_4\$. Nous pouvons le réprensenter graphiquement comme ci-contre.</p>
+</div>
+<div class="paragraph">
+<p>Il est maitenant plus facile de comprendre comment le code correcteur marche. Si le cercle vert donc \$p_1 \oplus d_1 \oplus d_2 \oplus d_4\$ est égal à zéro alors tous ces bits sont corrects. Cependant, imaginons qu&#8217;en additionnant les bits du cercle bleu nous obtienions \$p_2 \oplus d_1 \oplus d_3 \oplus d_4 = 1\$ et pour le cercle rose \$p_3 \oplus d_2 \oplus d_3 \oplus d_4 = 1\$. Le bit qui n&#8217;est pas dans le cercle vert, mais dans les deux autres est erroné. Dans ce cas, le bit erroné est \$d_1\$ : il faut donc le corriger. De même, si les trois cercles sont erronés alors le bit à corriger est \$d_4\$. Enfin, si un seul cercle est erroné, l&#8217;erreur provient du bit de parité au sein du code.</p>
+</div>
+<div class="paragraph">
+<p>Le tableau ci-dessus présente le récapitulatif de toutes les possibilités si il y a une seule erreur dans le message. Les sept colonnes correspondent aux sept possibles altérations des différents bits du message, et les trois lignes correspondent aux parités des cercles associés, c&#8217;est à dire l&#8217;addition de tous les bits dans ce même cercle.</p>
+</div>
+<table id="Tableau" class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">Bit #</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">2</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">3</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">4</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">5</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">6</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">7</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Bit erroné</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_2\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_3\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_2\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_3\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_4\$</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cercle rouge</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cercle bleu</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cercle vert</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Nous pouvons remarquer ici que chaque erreur entraine un jeu de parité différent. De plus, si toutes les parités sont à 0 alors le message ne contient pas d&#8217;erreur. Nous pouvons aussi remarquer qu&#8217;en plaçant les bits dans cet ordre là, nous pouvons lire par colonnes les nombres de un à sept en binaire. Ainsi le décodage du code correcteur sera plus simple, ce qui implique que le message \$d_1d_2d_3d_4\$ devient \$p_1p_2d_1p_3d_2d_3d_4\$ avec le code de Hamming.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ii_2_construction_du_code_et_décodage">II.2 <strong>Construction du code et décodage</strong></h3>
+<div class="sect3">
+<h4 id="_code_linéaire">Code linéaire</h4>
+<div class="paragraph">
+<p>Un code linéaire dispose d&#8217;une structure algébrique plus riche que celle du cadre général des codes correcteurs. L&#8217;ensemble E des messages à envoyer est celui de mots de quatre lettres prises dans l&#8217;ensemble {0,1}, le message est codé en un mot de sept lettres encore prises dans le même ensemble. On note F l&#8217;espace des mots de sept lettres binaires. E et F sont des espaces vectoriels.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Les tables d&#8217;addition et de multiplication sont les suivantes:<br></p>
+</div>
+<table class="tableblock frame-none grid-none center" style="width: 50%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 20%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\(+\)</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 20%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\(\times\)</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">0</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="paragraph">
+<p>L' encodage, c’est-à-dire l&#8217;opération consistant à transformer le message de E de quatre lettres en un code de F de sept lettres apparait alors comme une application linéaire de E dans F. Elle se décrit par une matrice. Même si le corps est inhabituel, tous les résultats de l&#8217;algèbre linéaire s&#8217;appliquent ici. Pour cette raison, un tel code est dit linéaire. L&#8217;encodage consiste à multiplier le vecteur de quatre lettres binaires par une matrice 7x4 pour obtenir un vecteur composé de sept lettres binaires.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_matrice_génératrice">Matrice génératrice</h4>
+<div class="paragraph">
+<p>La connaissance de l&#8217;image de chaque vecteur de la base canonique détermine entièrement la matrice génératrice \(G\).Les quatre vecteurs de la base conaonique correspondent aux messages suivants : \(d_1 = 1000\), \(d_2 = 0100\), \(d_3 = 0010\) et \(d_4 = 0001\). Notons \(\sigma(d_1 d_2 d_3 d_4)\) l&#8217;image du mot \(d_1 d_2 d_3 d_4\).<br>
+\(\sigma(1000)=1110000\), \(\sigma(0100)=1001100\), \(\sigma(0010)=0101010\) et \(\sigma(0001)=1101001\)<br>
+La matrice génératrice est formée des quatre colonnes correspondant aux images des vecteurs de la base canonique, on obtient:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\newcommand{\G}{
+\begin{pmatrix}
+1 &amp; 1 &amp; 0 &amp; 1\\
+1 &amp; 0 &amp; 1 &amp; 1\\
+1 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 1 &amp; 1 &amp; 1\\
+0 &amp; 1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+}
+\newcommand{\D}{
+\begin{pmatrix}
+1\\
+0\\
+1\\
+1
+\end{pmatrix}
+}
+\newcommand{\C}{
+\begin{pmatrix}
+0\\
+1\\
+1\\
+0\\
+0\\
+1\\
+1
+\end{pmatrix}
+}
+\newcommand{\H}{
+\begin{pmatrix}
+0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 1\\
+0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1 &amp; 1\\
+1 &amp; 0 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 1
+\end{pmatrix}
+}
+\newcommand{\Ca}{
+\begin{pmatrix}
+0\\
+1\\
+1\\
+0\\
+1\\
+1\\
+1
+\end{pmatrix}
+}
+\newcommand{\zer}{
+\begin{pmatrix}
+0 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+}
+\newcommand{\res}{
+\begin{pmatrix}
+1 \\
+0 \\
+1
+\end{pmatrix}
+}
+\newcommand{\Ec}{
+\begin{pmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+1 \\
+0 \\
+0
+\end{pmatrix}
+}
+G = \G\]
+</div>
+</div>
+<div class="stemblock">
+<div class="content">
+
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exemple">Exemple</h4>
+<div class="imageblock right">
+<div class="content">
+<img src="img/exemple(7,4).png" alt="exemple(7,4)" width="250" height="250">
+</div>
+<div class="title">Figure 4. Exemple avec le mot 1011</div>
+</div>
+<div class="paragraph">
+<p>Prenons comme exemple que la source veut protéger le mot \$d = 1011\$. Les bits de parité sont alors égaux à zéro pour \$p_1\$, un pour \$p_2\$ et zéro pour \$p_3\$. En respectant l&#8217;ordre des vecteurs de la base de \$F\$, nous obtenons manuellement le vecteur \$c = 0110011\$, donc le produit matriciel de \$G\$ la matrice génératrice par la matrice \$D\$ du vecteur \$d\$ nous devons obtenir la matrice \$C\$ du vecteur \$c\$.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[G \times D = \G\D = \C\]
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_matrice_de_contrôle">Matrice de contrôle</h4>
+<div class="paragraph">
+<p>Une approche analogue à celle de l&#8217;encodage permet la détection d&#8217;erreur. Trois conditions doivent être remplies, une par cercle de la figure représentative. Chaque condition s&#8217;exprime comme une somme devant être paire, ou encore nulle dans le corps binaire. Ces trois conditions forment les trois lignes d&#8217;une matrice dite matrice de contrôle. Un message reçu est sans erreur si et seulement si le produit de la matrice de contrôle H par la matrice colonne C du vecteur c est égal à la matrice colonne nulle.</p>
+</div>
+<div class="paragraph">
+<p>La condition associée au cercle rouge p3 signifie que la somme p3 + d2 + d3 + d4 doit être paire. La première ligne de la matrice correspond aux coordonnées 0001111. Cette ligne correspond à la première ligne du <a href="#Tableau">tableau</a> du paragraphe bit de parité. Il en est de même pour les autres lignes, correspondant aux cercles bleu et vert. On obtient la matrice H :</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[H = \H\]
+</div>
+</div>
+<div class="paragraph">
+<p>De manière plus générale, il est possible de vérifier que le produit de H par G est bien nul, ce qui assure que tout message reçu est bien validé si aucune altération n&#8217;a été commise.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[H \times G = \H \G = \zer\]
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_correction_derreur">Correction d&#8217;erreur</h4>
+<div class="paragraph">
+<p>Reprenons le mot \$c = 0110011\$ et rajoutons une erreur \$x = 0110111\$. Le vecteur \$x\$ ne peut passer le test de la matrice de contrôle :</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[H \times X = \H \Ca = \res\]
+</div>
+</div>
+<div class="paragraph">
+<p>L&#8217;erreur est donc détectée, la matrice de contrôle présente un vecteur non nul, correspondant à la valeur 1012 en binaire, soit cinq. La correction associée correspond au mot \(e_5\) composé de sept lettres égales à zéro sauf une, la cinquième est égale à un. Le décodage, dans le cas d&#8217;un syndrome non nul correspond à additionner l&#8217;erreur \(e_5\) = 0000<strong>1</strong>00. On obtient :</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[C =  X + E_5 = \Ca \Ec = \C\]
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ii_3_code_de_hamming_en_8_4">II.3 <strong>Code de Hamming en (8, 4)</strong></h3>
+<div id="Hamming" class="paragraph">
+<p>Nous venons de voir le code de Hamming en (7, 4) : 7 représentant le nombre de bits d&#8217;un mot et 4 le nombre de bits du message. C&#8217;est un code très performant quand il y a une seule erreur du fait que la correction est un simple calcul matriciel et qu&#8217;il n&#8217;y ait pas beaucoup de redondance. Cependant si il y a deux erreurs, le code va se comporter comme si il n&#8217;y avait qu&#8217;une erreur et va réparer une autre erreur. Par exemple, si \$p_1\$ est erronée et \$p_2\$ aussi, il va croire que c&#8217;est le bit \$d_1\$ qui est erroné. Reprenons le mot \$d = 1011\$ et donc \$c = 0110011\$ et inversons \$p_1\$ et \$p_2\$ nous avons \$c_1 = 1010011\$.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[C_1 \times H = \Ca \H = \begin{pmatrix}0\\ 1\\ 1\end{pmatrix}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Dans ce cas là, les erreurs sont donc aux bits \$p_1\$ et  \$p_2\$, mais le code corrigera le bit  \$d_1\$. Pour corriger ce problème et de plus, compléter l&#8217;octet, nous pouvons rajouter un bit de parité \$p_4\$ des sept autres bits. De cette manière, si le code de Hamming(7,4) détecte une erreur, il vérifie que la somme des huit bits de l&#8217;octet est impair. Sinon, cela veut dire qu&#8217;il y a plus d&#8217;une d&#8217;erreur. Bien sûr si il y a trois, cinq ou sept erreurs le bit de parité ne pourra pas aider le code pour réparer le mots. Et si c&#8217;est le bit \$p_4\$ qui est erroné cela ne pose pas de problème car le code de Hamming(7,4) lui ne détectera pas d&#8217;erreur. En fait nous "encapsulons" le code de Hamming(7,4) avec un bit de parité. Donc avec le mot \$c = 0110011\$ cela devient \$c = 00110011\$ car le bit de parité vient se placer en première position.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_iii_généralisaton_du_code_de_hamming">III - Généralisaton du code de Hamming</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_iii_1_hamming_en_7_4">III.1 <strong>Hamming en (7, 4)</strong></h3>
+<div class="paragraph">
+<p>Nous avons vu le code de Hamming(7,4) et l&#8217;avons illustré par des diagrammes de Venn. Pour comprendre simplement le principe du code, nous allons maintenant comprendre comment ce code marche et comment nous pouvons l&#8217;agrandir grâce à une représentation en grille.</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_2\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_1\$</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_3\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_2\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_3\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_4\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_le_jeu_du_qui_est_ce">Le jeu du "Qui est-ce ?"</h4>
+<div class="paragraph">
+<p>Imaginons que dans cette grille il y ait une erreur mais nous ne savons pas où. Il faut donc être sûr qu&#8217;en trois questions (chaque question représente un bit de redondance) fermées, nous puissions connaître la position du bit erroné et ce,qu&#8217;importe où soit ce bit.
+Nous devrons donc définir trois zones et chaque question sera du type : "L&#8217;erreur se trouve t-il dans cette zone ?". Il faut donc que chaque bit ait une combinaison de oui et de non unique. Pour se faire nous allons définir les zones de cette manière (les zones étant les parties hachurées):</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="img/zone74.png" alt="zone74">
+</div>
+<div class="title">Figure 5. Représentation des trois zones</div>
+</div>
+<div class="paragraph">
+<p>Nous allons prendre un exemple où il y a une erreur entourée en rouge :</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="img/1.png" alt="1">
+</div>
+<div class="title">Figure 6. Grille avec erreur</div>
+</div>
+<div class="paragraph">
+<p>Dans un premier, nous se demandons donc si l&#8217;erreur se trouve dans la zone 1, \$Q_1 = "L'erreur se trouve t-elle dans la zone 1 ?"\$ .</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="img/2.png" alt="2">
+</div>
+<div class="title">Figure 7. Question 1</div>
+</div>
+<div class="paragraph">
+<p>Non, l&#8217;erreur ne se trouve pas la première zone. Il ne reste donc plus que deux colonnes puis l&#8217;autre. Maintenant, nous nous demandons si l&#8217;erreur se trouve dans la zone 2, \$Q_2 = "L'erreur se trouve t-elle dans la zone 2 ?"\$ donc implicitement si l&#8217;erreur provient de la colonne une ou trois.</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="img/3.png" alt="3">
+</div>
+<div class="title">Figure 8. Question 2</div>
+</div>
+<div class="paragraph">
+<p>Et oui, l&#8217;erreur provient de la zone 2.Avec ces deux informations, nous pouvons déduire que l&#8217;erreur se trouve dans la troisième colonne. Maintenant, avec la réponse de la dernière question nous aurons saurons si l&#8217;erreur se trouve dans la première ligne ou la seconde. \$Q_3 = "L'erreur se trouve t-elle dans la zone 3 ?"\$ :</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="img/4.png" alt="4">
+</div>
+<div class="title">Figure 9. Question 3</div>
+</div>
+<div class="paragraph">
+<p>Enfin l&#8217;erreur se trouve dans la zone 3, et nous savons qu&#8217;elle se trouve dans la troisième colonne. Nous savons maitenant que le bit erroné est le sixième : \$d_3\$. Chaque bit est représenté par un unique triplet de oui ou non, celui-ci donc part (Non, Oui, Oui). De cette manière nous pouvons donc remplir un tableau où chaque colonne représente une erreur différente, et chaque ligne une question où les "Oui" seront notés 1 et les "Non" seront notés 0.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">Bit #</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">1</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">2</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">3</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">4</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">5</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">6</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">7</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Bit erroné</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_2\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_3\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_2\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_3\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$d_4\$</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$Q_3\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$Q_2\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$Q_1\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Nous pouvons facilement remarquer la ressemblance avec le <a href="#Tableau">tableau</a> de la partie II : ils sont en fait les mêmes. Nous pouvons donc comprendre qu&#8217;avec un triplet de réponse nous saurons si un mot est erroné, et si oui, où est l&#8217;erreur.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_les_bits_de_parités">Les bits de parités</h4>
+<div class="paragraph">
+<p>Il faut maintenant trouver un façon de savoir si l&#8217;erreur est dans la ou les zones 1, 2 et 3 : pour se faire, Nous pouvons donc utiliser le bit de parité. Il y aura donc un bit de parité par zone : cela implique qu&#8217;il doit y avoir un nombre pair de un dans chaque zone. De plus, chaque bit de parité doit être uniquement dans sa propre zone. Le positionnement le plus logique et simple est celui-ci :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_1\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_2\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_1\$</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$p_3\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_2\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_3\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$d_4\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Nous commençons à comprendre cette ordre de bit qui pouvait nous sembler étrange. Et si nous numérotons chaque case par son index en binaire sur 3 bits comme ceci :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">001</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">010</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">011</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">100</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">101</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">110</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">111</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Nous pouvons remarquer que la zone 1 est en fait l&#8217;ensemble des cases qui ont un index noté \$b_2b_{1}1\$, c&#8217;est à dire qui fini par un 1 comme "001" ou "111". Que la zone 2 est l&#8217;ensemble des cases qui ont un index noté \$b_2 1b_0\$ de même pour la zone 3 pour qui a l&#8217;ensemble des cases qui sont sous la forme \$1b_1b_0\$.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 15%;">
+<caption class="title">Table 1. Zone 1</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">00<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">01<strong>1</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">10<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">11<strong>1</strong></p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 15%;">
+<caption class="title">Table 2. Zone 2</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>1</p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 15%;">
+<caption class="title">Table 3. Zone 3</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>00</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>01</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>10</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>11</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Il est donc important de remarquer qu&#8217;en additionnant modulo 2 tous les index où le bit vaut 1, alors le résultat doit être \$000_2\$. Prenons l&#8217;exemple de la zone 1 : cela sera la même logique pour toutes les autres zones. Avec le bit de parité il doit donc y avoir un nombre pair de 1 dans cette zone. Faisons l&#8217;addition modulo 2 des index notés \$b_2b_{1}1\$ dans cette zone, où le bit est à 1 et concentronons-nous sur les bits \$b_0\$ des index, ici, toujours égaux à 1. Alors, si il y a un nombre pair de un dans la zone, il y a un nombre pair de \$b_0\$ valant 1 qui s&#8217;additione. La somme congrue à 0 modulo 2.</p>
+</div>
+<div class="paragraph">
+<p>Ce qui nous laisse penser que trouver l&#8217;erreur sera un jeu d&#8217;enfant.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_trouver_lerreur">Trouver l&#8217;erreur</h4>
+<div class="paragraph">
+<p>Prenons le mot \$c = 0110011\$ et mettons le dans cette grille :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$0_001\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$1_010\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_011\$</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$0_100\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$0_101\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_110\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_111\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Et rajoutons une erreur :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$0_001\$</p></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$1_010\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_011\$</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$1_100\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$0_101\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_110\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_111\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Cherchons l&#8217;erreur à présent. Tout d&#8217;abord, gardons les cases où le bit est à 1 :</p>
+</div>
+<table class="tableblock frame-all grid-all center" style="width: 20%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<th class="tableblock halign-center valign-middle"></th>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$1_010\$</p></th>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_011\$</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-middle"><p class="tableblock">\$1_100\$</p></th>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_110\$</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">\$1_111\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Puis faisons la somme modulo 2 de tous les index en base 2 des cases qui nous restent.<br></p>
+</div>
+<div class="paragraph">
+<p>\(010_2 \oplus 011_2 \oplus 100_2 \oplus 110_2 \oplus 111 = 100_2\)</p>
+</div>
+<div class="paragraph">
+<p>Cela nous donne l&#8217;index en base 2 du bit erroné. Et oui, si la somme des bits \$b_2\$ des index notés \$b_2b_1b_0\$ que nous avons gardé est égale à 1, alors il y a un nombre impair de 1 dans la zone 3 : cela implique que le bit erroné est dans la zone et que le rang du bit erroné est noté \$1b_{1}b_0\$. Avec le même raisonnement pour toutes les autres zones, nous obtenons l&#8217;index de l&#8217;erreur \$100_2\$, c&#8217;est à dire l&#8217;index du bit \$p_3\$.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_iii_2_de_plus_en_plus_grand">III.2 <strong>De plus en plus grand</strong></h3>
+<div class="sect3">
+<h4 id="_hamming_en_15_11">Hamming en (15, 11)</h4>
+<div class="paragraph">
+<p>Nous pouvons aussi agrandir le code pour protéger plus de bits cela peut être util quand le mot passe par un canal de transmission fiable, cela permet aussi d&#8217;avoir un taux bits de redondances sur bit de message moins élevé, donc pour un même nombre de bit de message à transmettre, on doit transmettre moins de bits de redondance.<br>
+Si on rajoute deux ligne à la grille du code de Hamming(7,4) on rajoute alors huit bits. De plus en rajoutant deux colonnes on doit rajouter un seul bit de parité, et oui pour savoir dans laquel des quatres colonnes ce situe l&#8217;erreur il faut deux questions et de même pour les lignes il en faut donc quatre en tout.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 10%;">
+<caption class="title">Table 4. Zone 1</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">000<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">001<strong>1</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">010<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">011<strong>1</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">100<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">101<strong>1</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">110<strong>1</strong></p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">111<strong>1</strong></p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 10%;">
+<caption class="title">Table 5. Zone 2</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">00<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">00<strong>1</strong>1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">01<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">01<strong>1</strong>1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">10<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">10<strong>1</strong>1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">11<strong>1</strong>0</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">11<strong>1</strong>1</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 10%;">
+<caption class="title">Table 6. Zone 3</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>00</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>01</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>10</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">0<strong>1</strong>11</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>00</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>01</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>10</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">1<strong>1</strong>11</p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><table class="tableblock frame-all grid-all" style="width: 10%;">
+<caption class="title">Table 7. Zone 4</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">ㅤ</p></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+<td class="tableblock halign-center valign-middle"></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>000</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>001</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>010</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>011</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>100</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>101</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>110</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>1</strong>111</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>On stocke le quatrième bit de parité dans le bit d&#8217;index 1000 en suivant la même logique que pour le code de Hamming(7, 4). Nous venons de créer le code de Hamming(15, 11) avec le même raisonnement qu&#8217;avec <a href="#Hamming">Hamming(8, 4)</a> on peut rajouter un seizième bit qui sera le bit de parité des quizes autre bits. Nous pouvons agrandir le code autant que nous le souhaitons. Pour qu&#8217;il reste parfait, il nous suffit d&#8217;ajouter un bit de redondances pour chaque dont nous doublons la taille de la grille. Nous pouvons ainsi avec 21 bits de redondances corriger une erreur parmi plus d&#8217;un million de bit, et en rajoutant un bit de parité nous pouvons repérer si il y a deux ou quatres ou six erreurs&#8230;&#8203; Il faut donc choisir le code de Hamming le plus judicieux dans chaque cas de figure. Si nous avons un fort taux de bits erronés alors il nous faudra un code plus petit comme le 7, 4. Or, si nous avons un taux très bas, il nous faudra prendre un code plus grand. Il faut aussi prendre en compte le temps de calcul : vérifier un milllion de bits est plus long qu&#8217;en vérifier seulement seize.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2023-05-25 02:29:15 -0400
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
